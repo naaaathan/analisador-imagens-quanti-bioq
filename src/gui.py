@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 # gui.py — Interface (PySimpleGUI) + orquestração do fluxo (Calibração e Análise).
-# Correções:
-#  - Sliders lidos via 'values["-KEY-"]' (PySimpleGUI não usa .get() no elemento).
-#  - Helpers _adv_vals(values) em Calibração e Análise.
-#  - Layout em duas colunas, janela redimensionável, preview com aspecto.
 
 from typing import Optional, Any, Tuple, List, Dict
 import os
