@@ -135,7 +135,6 @@ ehthumbs.db
 Thumbs.db
 
 # Project specific
-dataset/
 *.csv
 *.xlsx
 *.xls
