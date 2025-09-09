@@ -106,19 +106,20 @@ def run_calibration_window(modelo: ModeloCalibracao) -> Optional[bool]:
     right_col = [
         [sg.Text("Poços detectados:")],
         [sg.Combo([], key="-WELL-SEL-", size=(28,1), enable_events=True, readonly=True),
-         sg.Button("«", key="-PREV-"), sg.Button("»", key="-NEXT-")],
+        sg.Button("«", key="-PREV-"), sg.Button("»", key="-NEXT-")],
         [sg.Text("Concentração conhecida:"), sg.Input(key="-CONC-", size=(12, 1))],
         [sg.HorizontalSeparator()],
         [sg.Text("ROIs de Fundo (acumuladas):")],
         [sg.Listbox(values=[], key="-BG-LIST-", size=(42, 5), disabled=True, expand_x=True, expand_y=False)],
         [sg.Button("Adicionar ROI de Fundo (+)", key="-BG-ADD-", disabled=True),
-         sg.Button("Remover Último Fundo", key="-BG-POP-", disabled=True)],
+        sg.Button("Remover Último Fundo", key="-BG-POP-", disabled=True)],
         [sg.Button("Limpar Fundos", key="-BG-CLEAR-", disabled=True)],
         [sg.HorizontalSeparator()],
         [adv_frame_calib],
         [sg.HorizontalSeparator()],
         [sg.Button("Adicionar Calibração", key="-ADD-", disabled=True),
-         sg.Button("Calibrar Modelo", key="-CALIBRATE-", disabled=True)],
+        sg.Button("Calibrar Modelo", key="-CALIBRATE-", disabled=True),
+        sg.Button("Exibir Curva", key="-PLOT-CURVE-", disabled=True)], 
         [sg.Button("Modo Análise", key="-SWITCH-ANALYSIS-"), sg.Button("Sair", key="-EXIT-")],
     ]
 
@@ -237,6 +238,15 @@ def run_calibration_window(modelo: ModeloCalibracao) -> Optional[bool]:
                 _set_bg_buttons_state()
             except Exception as e:
                 sg.popup(f"Erro ao carregar imagem: {e}", title="Erro")
+
+        elif event == "-PLOT-CURVE-":
+                if not modelo.esta_calibrado():
+                    sg.popup("Calibre o modelo primeiro para exibir a curva.", title="Aviso")
+                    continue
+                try:
+                    modelo.plot_calibracao() 
+                except Exception as e:
+                    sg.popup(f"Erro ao exibir curva: {e}", title="Erro")
 
         elif event == "-WELL-SEL-":
             if imagem_atual is None or not circulos:
@@ -391,12 +401,19 @@ def run_calibration_window(modelo: ModeloCalibracao) -> Optional[bool]:
                     sg.popup("Adicione pelo menos 2 pontos de calibração.", title="Dados insuficientes")
                     continue
                 modelo.calibrar()
-                a, b = modelo.obter_coeficientes()
+                coefs, intercept = modelo.obter_coeficientes()
                 r2 = modelo.obter_r2()
-                sg.popup(
-                    f"Modelo calibrado!\nConcentração = {a:.4f} * Intensidade + {b:.4f}\nR² = {r2:.4f}",
-                    title="Resultado da Calibração"
-                )
+        
+       
+                if len(coefs) == 1:
+                    msg = f"Modelo calibrado!\nConcentração = {coefs[0]:.4f} * Intensidade + {intercept:.4f}\nR² = {r2:.4f}"
+                else:
+            
+                    coef_terms = " + ".join([f"{c:.4f}*X{i+1}" for i, c in enumerate(coefs)])
+                    msg = f"Modelo calibrado!\nConcentração = {coef_terms} + {intercept:.4f}\nR² = {r2:.4f}"
+        
+                sg.popup(msg, title="Resultado da Calibração")
+                window["-PLOT-CURVE-"].update(disabled=False) #type: ignore
             except Exception as e:
                 sg.popup(f"Erro na calibração: {e}", title="Erro")
 
