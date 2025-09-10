@@ -144,3 +144,6 @@ cache/
 
 # Claude Code
 .claude/
+
+#Compressed images
+compressed/

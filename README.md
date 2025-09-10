@@ -1,5 +1,14 @@
 # Analisador de Imagens para Quantificação Bioquímica
 
+## Integrantes
+
+- Douglas Ferreira Martins — 12311BCC058
+- Gustavo Cruz Biazi — 12111BCC025
+- Lázaro Joabe — 12211BCC022
+- Nathan Augusto Coelho dos Santos — 11811BCC046
+
+> **Nota:** o *pitch* de como usar a aplicação e o relatório desenvolvido pelo grupo estão na **raiz do projeto**.
+
 ## Descrição do Projeto
 
 Este projeto implementa um sistema para análise quantitativa de ensaios de Bradford, permitindo a extração de dados quantitativos de imagens digitalizadas de reações colorimétricas entre proteínas e reagente de Bradford. A aplicação possibilita ao usuário carregar imagens, definir regiões de interesse (ROI), calibrar um modelo com base em imagens padrão e analisar amostras desconhecidas para prever concentrações de proteína.

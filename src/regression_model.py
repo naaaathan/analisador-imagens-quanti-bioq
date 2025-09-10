@@ -8,7 +8,7 @@ import os
 
 class ModeloCalibracao:
     """
-    Agora suporta X multivariável (p.ex. H,S,V ou L,a,b) e regressão linear multivariada.
+    Suporta X multivariável (p.ex. H,S,V ou L,a,b) e regressão linear multivariada.
     - adicionar_dado(x_vector, y_scalar) onde x_vector pode ser a intensidade ou um vetor de features
     - calibrar() ajusta LinearRegression
     - prever(x_vector) retorna escalar previsão
@@ -59,7 +59,7 @@ class ModeloCalibracao:
 
     def obter_coeficientes(self) -> Tuple[List[float], float]:
         """
-        CORREÇÃO: Retorna os coeficientes como lista de floats e o intercepto como float.
+        Retorna os coeficientes como lista de floats e o intercepto como float.
         Para regressão multivariável: y = a1*x1 + a2*x2 + ... + b
         """
         if not self._calibrado or self.model is None:
